@@ -1,25 +1,24 @@
-# from django.shortcuts import render
-# from django.shortcuts import render, HttpResponse# notice the import!
-# def index(request):
-#     return render(request, "index.html")
+from django.shortcuts import render, redirect, HttpResponse
 
-
-# def index(request):
-#     return HttpResponse("This is my response!")
-
-from django.shortcuts import render, redirect
 
 def index(request):
     return render(request, 'form.html')
 
 def process(request):
-    if request.method == 'POST':
-        context = {
-            'name': request.POST['name'],
-            'lang': request.POST['location'],
-            'loc': request.POST['language']
-        }
-        return render(request, 'result.html', context)
-    return render(request, 'result.html')
+    if request.method == 'GET':
+        print('Method', request.method)
+        return redirect('/')
+    request.session ['name'] = request.POST['name']
+    request.session ['loc'] = request.POST['location']
+    request.session ['lang'] = request.POST['language']
+    
+    return redirect('/result')
 
-# Create your views here.
+def result(request):
+    print(request.session)
+    # context = {
+    #   'name': request.session['name'],
+    #   'loc': request.session['loc'],
+    #   'lang': request.session['lang']
+    # }
+    return render(request,'result.html')
